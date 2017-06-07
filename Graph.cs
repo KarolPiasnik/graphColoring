@@ -17,5 +17,13 @@ namespace ConsoleApplication1
             adjacency = new bool[numberOfVertices, numberOfVertices];
         }
 
+        public void addEdge(int v1, int v2)
+        {
+            adjacency[v1, v2] = true;
+        }
+
+        // Prints greedy coloring of the vertices
+        public void greedyColoring()
+        { }
     }
 }
