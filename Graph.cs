@@ -38,27 +38,21 @@ namespace ConsoleApplication1
 
                 for (int i = 1; i < lines.Length; ++i)
                 {
-                    Console.WriteLine(" ");
                     for (int j = 0; j < lines[i].Length; ++j)
                     {
                         int counter = 0;
                         if (lines[i][j] == '1')
                         {
                             adjacency[i - 1, counter] = true;
-                            Console.Write("1");
                             ++counter;
                         }
                         else if (lines[i][j] == '0')
                         {
                             adjacency[i - 1, counter] = false;
-                            Console.Write("0");
 
                             ++counter;
                         }
-                        else
-                        {
-                            Console.Write(" ");
-                        }
+                        
                     }
                 }
             }
@@ -67,6 +61,54 @@ namespace ConsoleApplication1
                 Console.WriteLine("xxx");
             }
         }
+
+
+        //public Graph(string path)
+        //{
+        //    Console.WriteLine(path);
+
+        //    string[] lines = System.IO.File.ReadAllLines(path);
+        //    Console.WriteLine(lines.Length);
+        //    numberOfVertices = int.Parse(lines[0]);
+
+        //    if (lines.Length == numberOfVertices + 1)
+        //    {
+        //        adjacency = new bool[numberOfVertices, numberOfVertices];
+        //        for (int i = 0; i < numberOfVertices; ++i)
+        //            for (int j = 0; j < numberOfVertices; ++j)
+        //                adjacency[i, j] = false;
+
+        //        for (int i = 1; i < lines.Length; ++i)
+        //        {
+        //            Console.WriteLine(" ");
+        //            for (int j = 0; j < lines[i].Length; ++j)
+        //            {
+        //                int counter = 0;
+        //                if (lines[i][j] == '1')
+        //                {
+        //                    adjacency[i - 1, counter] = true;
+        //                    Console.Write("1");
+        //                    ++counter;
+        //                }
+        //                else if (lines[i][j] == '0')
+        //                {
+        //                    adjacency[i - 1, counter] = false;
+        //                    Console.Write("0");
+
+        //                    ++counter;
+        //                }
+        //                else
+        //                {
+        //                    Console.Write(" ");
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("xxx");
+        //    }
+        //}
 
         public void addEdge(int v1, int v2)
         {
