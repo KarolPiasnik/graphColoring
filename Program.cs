@@ -19,7 +19,9 @@ namespace ConsoleApplication1
             g1.addEdge(2, 3);
             g1.addEdge(3, 4);
             g1.greedyColoring();
-            Graph g1 = new Graph("graf.txt");
+            Graph g2 = new Graph(@"C:\Users\Karol\Desktop\cpp kolo\6\ConsoleApplication1\ConsoleApplication1\graf.txt");
+            g2.greedyColoring();
+
 
         }
     }
