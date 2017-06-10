@@ -24,15 +24,32 @@ namespace ConsoleApplication1
         public Graph(string path)
         {
             string[] lines = System.IO.File.ReadAllLines(path);
-            numberOfVertices = int.Parse(lines[0]);
 
             if (lines.Length == numberOfVertices + 1)
             {
+                numberOfVertices = int.Parse(lines[0]);
+                adjacency = new bool[numberOfVertices, numberOfVertices];
                 for (int i = 0; i < numberOfVertices; ++i)
                     for (int j = 0; j < numberOfVertices; ++j)
-                    {
+                        adjacency[i, j] = false;
 
+                for (int i = 0; i < numberOfVertices; ++i)
+                {
+                    for (int j = 0; j < lines[i + 1].Length; ++j)
+                    {
+                        int counter = 0;
+                        if (lines[i][j] == '1')
+                        {
+                            adjacency[i, counter] = true;
+                            ++counter;
+                        }
+                        else if (lines[i][j] == '0')
+                        {
+                            adjacency[i, counter] = false;
+                            ++counter;
+                        }
                     }
+                }
             }
             else
             {

@@ -19,6 +19,8 @@ namespace ConsoleApplication1
             g1.addEdge(2, 3);
             g1.addEdge(3, 4);
             g1.greedyColoring();
+            Graph g1 = new Graph("graf.txt");
+
         }
     }
 }
