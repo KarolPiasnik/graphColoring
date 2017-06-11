@@ -31,8 +31,9 @@ namespace ConsoleApplication1
             g2.addEdge(4, 3);
             g2.greedyColoring2();
 
-            //Graph g2 = new Graph(@"C:\Users\Karol\Desktop\cpp kolo\6\ConsoleApplication1\ConsoleApplication1\graf.txt");
-            //g2.greedyColoring();
+            Graph g3 = new Graph(@"C:\Users\Karol\Desktop\cpp kolo\6\ConsoleApplication1\ConsoleApplication1\graf.txt");
+            g3.printAdjacencyList();
+            g3.greedyColoring2();
 
 
         }

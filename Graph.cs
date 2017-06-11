@@ -51,7 +51,7 @@ namespace ConsoleApplication1
                         if (lines[i][j] == '1')
                         {
                             adjacency[i - 1, counter] = true;
-                            adjacencyList[i - 1].Add(j);
+                            adjacencyList[i - 1].Add(counter);
                             ++counter;
                         }
                         else if (lines[i][j] == '0')
@@ -70,6 +70,17 @@ namespace ConsoleApplication1
             }
         }
 
+        public void printAdjacencyList()
+        {
+            foreach (List<int> list in adjacencyList)
+            {
+                foreach (int i in list)
+                {
+                    Console.Write(i + " ");
+                }
+                Console.WriteLine("");
+            }
+        }
 
         //public Graph(string path)
         //{
