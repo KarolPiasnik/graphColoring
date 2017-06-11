@@ -32,9 +32,7 @@ namespace ConsoleApplication1
             g2.greedyColoring2();
 
             Graph g3 = new Graph(@"C:\Users\Karol\Desktop\cpp kolo\6\ConsoleApplication1\ConsoleApplication1\graf.txt");
-            g3.printAdjacencyList();
             g3.greedyColoring2();
-
 
         }
     }

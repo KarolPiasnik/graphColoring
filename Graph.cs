@@ -45,9 +45,9 @@ namespace ConsoleApplication1
 
                 for (int i = 1; i < lines.Length; ++i)
                 {
+                    int counter = 0;
                     for (int j = 0; j < lines[i].Length; ++j)
                     {
-                        int counter = 0;
                         if (lines[i][j] == '1')
                         {
                             adjacency[i - 1, counter] = true;
@@ -228,6 +228,20 @@ namespace ConsoleApplication1
             // print the result
             for (int u = 0; u < numberOfVertices; u++)
                 Console.WriteLine("Vertex " + u + "---> Color" + result[u]);
+        }
+
+        public void LFColoring()
+        {
+            int[] vertexDegrees = new int[numberOfVertices];
+            for (int i = 0; i < numberOfVertices; ++i)
+            {
+                vertexDegrees[i] = adjacencyList[i].Count;
+            }
+            List<int>[] tmp = adjacencyList;
+            List<int>[] sortedAdjacencyList = adjacencyList.OrderBy(s => -s.Count).ToArray();
+            adjacencyList = sortedAdjacencyList;
+            greedyColoring2();
+            adjacencyList = tmp;
         }
     }
 }
