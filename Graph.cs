@@ -11,7 +11,8 @@ namespace ConsoleApplication1
     {
         int numberOfVertices;
         bool[,] adjacency;
-        List<int>[] adjacencyList;
+        Tuple<List<int>, int>[] adjacencyList;
+        //List<int>[] adjacencyList;
 
         public Graph(int numberOfVertices)
         {
@@ -20,9 +21,9 @@ namespace ConsoleApplication1
             for (int i = 0; i < numberOfVertices; ++i)
                 for (int j = 0; j < numberOfVertices; ++j)
                     adjacency[i, j] = false;
-            adjacencyList = new List<int>[numberOfVertices];
+            adjacencyList = new Tuple< List<int>, int>[numberOfVertices];
             for (int i = 0; i < numberOfVertices; ++i)
-                adjacencyList[i] = new List<int>();
+                adjacencyList[i] = new Tuple<List<int>, int>(new List<int>(), i);
         }
 
         public Graph(string path)
@@ -35,9 +36,9 @@ namespace ConsoleApplication1
 
             if (lines.Length == numberOfVertices + 1)
             {
-                adjacencyList = new List<int>[numberOfVertices];
+                adjacencyList = new Tuple<List<int>, int>[numberOfVertices];
                 for (int i = 0; i < numberOfVertices; ++i)
-                    adjacencyList[i] = new List<int>();
+                    adjacencyList[i] = new Tuple<List<int>, int>(new List<int>(), i);
                 adjacency = new bool[numberOfVertices, numberOfVertices];
                 for (int i = 0; i < numberOfVertices; ++i)
                     for (int j = 0; j < numberOfVertices; ++j)
@@ -51,7 +52,7 @@ namespace ConsoleApplication1
                         if (lines[i][j] == '1')
                         {
                             adjacency[i - 1, counter] = true;
-                            adjacencyList[i - 1].Add(counter);
+                            adjacencyList[i - 1].Item1.Add(counter);
                             ++counter;
                         }
                         else if (lines[i][j] == '0')
@@ -72,9 +73,9 @@ namespace ConsoleApplication1
 
         public void printAdjacencyList()
         {
-            foreach (List<int> list in adjacencyList)
+            for (int i = 0; i < numberOfVertices; ++i)
             {
-                foreach (int i in list)
+                foreach (int j in adjacencyList[i].Item1)
                 {
                     Console.Write(i + " ");
                 }
@@ -129,12 +130,21 @@ namespace ConsoleApplication1
         //    }
         //}
 
+        public int searchForVertex(int orginalNumber)
+        {
+            for (int i = 0; i < numberOfVertices; ++i)
+            {
+                if (adjacencyList[i].Item2 == orginalNumber)
+                    return i;
+            }
+            return -1;
+        }
         public void addEdge(int v1, int v2)
         {
             adjacency[v1, v2] = true;
             adjacency[v2, v1] = true;
-            adjacencyList[v1].Add(v2);
-            adjacencyList[v2].Add(v1);
+            adjacencyList[v1].Item1.Add(v2);
+            adjacencyList[v2].Item1.Add(v1);
 
         }
 
@@ -187,6 +197,8 @@ namespace ConsoleApplication1
 
         public void greedyColoring2()
         {
+            printAdjacencyList();
+
             int[] result = new int[numberOfVertices];
             // Assign the first color to first vertex
             result[0] = 0;
@@ -207,20 +219,20 @@ namespace ConsoleApplication1
                 // Process all adjacent vertices and flag their color
                 // as unavailable
                 
-                foreach (int i in adjacencyList[u])
+                foreach (int i in adjacencyList[u].Item1)
                     if (result[i] != -1)
                         available[result[i]] = true;
 
                 // Find the first available color
-                int cr;
-                for (cr = 0; cr < numberOfVertices; cr++)
-                    if (available[cr] == false)
+                int color;
+                for (color = 0; color < numberOfVertices; color++)
+                    if (available[color] == false)
                         break;
 
-                result[u] = cr; // Assign the found color
+                result[u] = color; // Assign the found color
 
                 // Reset the values back to false for the next iteration
-                foreach (int i in adjacencyList[u])
+                foreach (int i in adjacencyList[u].Item1)
                     if (result[i] != -1)
                         available[result[i]] = false;
             }
@@ -235,10 +247,10 @@ namespace ConsoleApplication1
             int[] vertexDegrees = new int[numberOfVertices];
             for (int i = 0; i < numberOfVertices; ++i)
             {
-                vertexDegrees[i] = adjacencyList[i].Count;
+                vertexDegrees[i] = adjacencyList[i].Item1.Count;
             }
-            List<int>[] tmp = adjacencyList;
-            List<int>[] sortedAdjacencyList = adjacencyList.OrderBy(s => -s.Count).ToArray();
+            Tuple<List<int>, int>[] tmp = adjacencyList;
+            Tuple<List<int>, int>[] sortedAdjacencyList = adjacencyList.OrderBy(s => -s.Item1.Count).ToArray();
             adjacencyList = sortedAdjacencyList;
             greedyColoring2();
             adjacencyList = tmp;
