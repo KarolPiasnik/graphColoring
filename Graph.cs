@@ -11,11 +11,13 @@ namespace ConsoleApplication1
     {
         int numberOfVertices;
         bool[,] adjacency;
+        int[] colors;
         Tuple<List<int>, int>[] adjacencyList;
 
         public Graph(int numberOfVertices)
         {
             this.numberOfVertices = numberOfVertices;
+            colors = new int[numberOfVertices];
             adjacency = new bool[numberOfVertices, numberOfVertices];
             for (int i = 0; i < numberOfVertices; ++i)
                 for (int j = 0; j < numberOfVertices; ++j)
@@ -33,6 +35,7 @@ namespace ConsoleApplication1
 
             if (lines.Length == numberOfVertices + 1)
             {
+                colors = new int[numberOfVertices];
                 adjacencyList = new Tuple<List<int>, int>[numberOfVertices];
                 for (int i = 0; i < numberOfVertices; ++i)
                     adjacencyList[i] = new Tuple<List<int>, int>(new List<int>(), i);
@@ -192,11 +195,17 @@ namespace ConsoleApplication1
             {
                 Console.WriteLine("Vertex " + u + "---> Color" + result[u]);
             }
+            colors = result;
+           
+        }
+
+        public void checkColoring()
+        {
 
             for (int i = 0; i < numberOfVertices; ++i)
             {
-                foreach (int j in adjacencyList[searchForVertex(i)].Item1)
-                    if (result[i] == result[j] && j != i)
+                foreach (int j in adjacencyList[i].Item1)
+                    if (colors[i] == colors[j] && j != i)
                         Console.WriteLine("Nie dziala");
             }
         }
@@ -207,6 +216,32 @@ namespace ConsoleApplication1
             Tuple<List<int>, int>[] tmp = adjacencyList;
             Tuple<List<int>, int>[] sortedAdjacencyList = adjacencyList.OrderBy(s => -s.Item1.Count).ToArray();
             adjacencyList = sortedAdjacencyList;
+            this.greedyColoring2();
+            adjacencyList = tmp;
+        }
+
+        public void SLColoring()
+        {
+
+            Tuple<List<int>, int>[] tmp = adjacencyList;
+            Tuple<List<int>, int>[] tmp2 = adjacencyList;
+            for (int j = 0; j < numberOfVertices; ++j)
+            {
+                int smallest =1000000;
+                int index =1000000;
+                for (int i = 1; i < numberOfVertices; ++i)
+                {
+                    if(adjacencyList[i].Item1.Count < smallest && adjacencyList[i].Item1[0] != -10)
+                    {
+                        smallest = adjacencyList[i].Item1.Count;
+                        index = i;
+                    }
+                }
+                tmp2[j] = adjacencyList[index];
+                adjacencyList[j].Item1[0] = -10;
+            }
+
+            adjacencyList = tmp2;
             this.greedyColoring2();
             adjacencyList = tmp;
         }

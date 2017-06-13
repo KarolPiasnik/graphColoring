@@ -20,7 +20,7 @@ namespace ConsoleApplication1
             g1.addEdge(2, 3);
             g1.addEdge(2, 4);
             g1.addEdge(3, 4);
-            g1.greedyColoring2();
+            //g1.LFColoring();
 
             Graph g2 = new Graph(5);
             g2.addEdge(0, 1);
@@ -29,11 +29,11 @@ namespace ConsoleApplication1
             g2.addEdge(1, 4);
             g2.addEdge(2, 4);
             g2.addEdge(4, 3);
-            g2.greedyColoring2();
+            //g2.SLColoring();
 
             Graph g3 = new Graph(@"C:\Users\Karol\Desktop\cpp kolo\6\ConsoleApplication1\ConsoleApplication1\graf.txt");
-            g3.greedyColoring2();
-
+            g3.LFColoring();
+            g3.checkColoring();
         }
     }
 }
