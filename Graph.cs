@@ -102,7 +102,6 @@ namespace ConsoleApplication1
 
         }
 
-        // Prints greedy coloring of the vertices
         public void greedyColoring()
         {
             int[] result = new int[numberOfVertices];
@@ -210,6 +209,17 @@ namespace ConsoleApplication1
             }
         }
 
+        public void RSColoring()
+        {
+
+            Tuple<List<int>, int>[] tmp = adjacencyList;
+            Random rnd = new Random();
+            Tuple<List<int>, int>[] sortedAdjacencyList = adjacencyList.OrderBy(s => rnd.Next()).ToArray();
+            adjacencyList = sortedAdjacencyList;
+            this.greedyColoring2();
+            adjacencyList = tmp;
+        }
+
         public void LFColoring()
         {
            
@@ -220,7 +230,7 @@ namespace ConsoleApplication1
             adjacencyList = tmp;
         }
 
-        public void SLColoring()
+        public void SLColoring() //TODO
         {
 
             Tuple<List<int>, int>[] tmp = adjacencyList;

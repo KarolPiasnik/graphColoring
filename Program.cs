@@ -32,7 +32,7 @@ namespace ConsoleApplication1
             //g2.SLColoring();
 
             Graph g3 = new Graph(@"C:\Users\Karol\Desktop\cpp kolo\6\ConsoleApplication1\ConsoleApplication1\graf.txt");
-            g3.LFColoring();
+            g3.RSColoring();
             g3.checkColoring();
         }
     }
