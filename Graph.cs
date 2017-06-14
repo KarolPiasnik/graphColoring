@@ -151,13 +151,13 @@ namespace ConsoleApplication1
         public void greedyColoring2()
         {
 
-            int[] result = new int[numberOfVertices];
+            colors = new int[numberOfVertices];
             // Assign the first color to first vertex
             
 
             // Initialize remaining V-1 vertices as unassigned
             for (int u = 0; u < numberOfVertices; u++)
-                result[u] = -1;  // no color is assigned to u
+                colors[u] = -1;  // no color is assigned to u
 
             // A temporary array to store the available color. True
             // value of available[color] would mean that the color is
@@ -172,8 +172,8 @@ namespace ConsoleApplication1
                 // as unavailable
                 
                 foreach (int i in adjacencyList[u].Item1)
-                    if (result[i] != -1)
-                        unAvailable[result[i]] = true;
+                    if (colors[i] != -1)
+                        unAvailable[colors[i]] = true;
 
                 // Find the first available color
                 int color;
@@ -181,21 +181,69 @@ namespace ConsoleApplication1
                     if (unAvailable[color] == false)
                         break;
 
-                result[adjacencyList[u].Item2] = color; // Assign the found color
+                colors[adjacencyList[u].Item2] = color; // Assign the found color
 
                 // Reset the values back to false for the next iteration
                 foreach (int i in adjacencyList[u].Item1)
-                    if (result[i] != -1)
-                        unAvailable[result[i]] = false;
+                    if (colors[i] != -1)
+                        unAvailable[colors[i]] = false;
             }
 
             // print the result
             for (int u = 0; u < numberOfVertices; u++)
             {
-                Console.WriteLine("Vertex " + u + "---> Color" + result[u]);
+                Console.WriteLine("Vertex " + u + "---> Color" + colors[u]);
             }
-            colors = result;
            
+        }
+
+        public void interchangeColoring()
+        {
+
+            colors = new int[numberOfVertices];
+            // Assign the first color to first vertex
+
+
+            // Initialize remaining V-1 vertices as unassigned
+            for (int u = 0; u < numberOfVertices; u++)
+                colors[u] = -1;  // no color is assigned to u
+
+            // A temporary array to store the available color. True
+            // value of available[color] would mean that the color is
+            // assigned to one of its adjacent vertices
+            bool[] unAvailable = new bool[numberOfVertices];
+            for (int color = 0; color < numberOfVertices; ++color)
+                unAvailable[color] = false;
+            // Assign color to remaining V-1 vertices
+            for (int u = 0; u < numberOfVertices; u++)
+            {
+                // Process all adjacent vertices and flag their color
+                // as unavailable
+
+                foreach (int i in adjacencyList[u].Item1)
+                    if (colors[i] != -1)
+                        unAvailable[colors[i]] = true;
+
+                // Find the first available color
+                int color;
+                for (color = 0; color < numberOfVertices; color++)
+                    if (unAvailable[color] == false)
+                        break;
+
+                colors[adjacencyList[u].Item2] = color; // Assign the found color
+
+                // Reset the values back to false for the next iteration
+                foreach (int i in adjacencyList[u].Item1)
+                    if (colors[i] != -1)
+                        unAvailable[colors[i]] = false;
+            }
+
+            // print the result
+            for (int u = 0; u < numberOfVertices; u++)
+            {
+                Console.WriteLine("Vertex " + u + "---> Color" + colors[u]);
+            }
+
         }
 
         public void checkColoring()
