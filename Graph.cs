@@ -71,6 +71,17 @@ namespace ConsoleApplication1
             }
         }
 
+        public int getChromaticNumber()
+        {
+            int chromaticNumber = -1;
+            foreach (int color in colors)
+            {
+                if (color > chromaticNumber)
+                    chromaticNumber = color;
+            }
+            return chromaticNumber + 1;
+        }
+
         public void printAdjacencyList()
         {
             for (int i = 0; i < numberOfVertices; ++i)
