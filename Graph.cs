@@ -82,6 +82,18 @@ namespace ConsoleApplication1
             return chromaticNumber + 1;
         }
 
+        public void writeColoringToFile(string path)
+        {
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(path))
+
+            {
+                for(int i = 0; i < numberOfVertices; ++i)
+                {
+                    file.WriteLine("Vertex " + i + " Color: " + colors[i]);
+                }
+            }
+        }
+
         public void printAdjacencyList()
         {
             for (int i = 0; i < numberOfVertices; ++i)
