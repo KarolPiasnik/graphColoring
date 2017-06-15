@@ -199,39 +199,73 @@ namespace ConsoleApplication1
 
         public void interchangeColoring()
         {
-
             colors = new int[numberOfVertices];
-            // Assign the first color to first vertex
-
-
-            // Initialize remaining V-1 vertices as unassigned
             for (int u = 0; u < numberOfVertices; u++)
-                colors[u] = -1;  // no color is assigned to u
-
-            // A temporary array to store the available color. True
-            // value of available[color] would mean that the color is
-            // assigned to one of its adjacent vertices
+                colors[u] = -1;
+            colors[0] = 0;
             bool[] unAvailable = new bool[numberOfVertices];
             for (int color = 0; color < numberOfVertices; ++color)
                 unAvailable[color] = false;
-            // Assign color to remaining V-1 vertices
+            int highestColorNumber = 0;
             for (int u = 0; u < numberOfVertices; u++)
             {
-                // Process all adjacent vertices and flag their color
-                // as unavailable
-
                 foreach (int i in adjacencyList[u].Item1)
                     if (colors[i] != -1)
                         unAvailable[colors[i]] = true;
 
-                // Find the first available color
                 int color;
                 for (color = 0; color < numberOfVertices; color++)
                     if (unAvailable[color] == false)
+                    {
                         break;
+                    }
 
-                colors[adjacencyList[u].Item2] = color; // Assign the found color
 
+                if (color > highestColorNumber) // only difference to greedy coloring
+                {
+
+                    bool[] tmpAvailable = new bool[highestColorNumber + 2];
+
+                    foreach (int vertex in adjacencyList[u].Item1)
+                    {
+                        for (int n = 0; n < highestColorNumber + 2; ++n)
+                            tmpAvailable[n] = true;
+
+                        foreach (int vertex2 in adjacencyList[searchForVertex(vertex)].Item1)
+                        {
+                            if (colors[searchForVertex(vertex2)] != -1)
+                                tmpAvailable[colors[searchForVertex(vertex2)]] = false;
+                        }
+
+                        for (int n = 0; n <= highestColorNumber + 1; ++n)
+                            if (tmpAvailable[n] && n < colors[searchForVertex(vertex)] || colors[searchForVertex(vertex)] == -1)
+                            {
+                                colors[searchForVertex(vertex)] = n;
+                                break;
+                            }
+                    }
+
+                    for (int n = 0; n < highestColorNumber + 2; ++n)
+                        tmpAvailable[n] = true;
+
+                    foreach (int vertex in adjacencyList[u].Item1)
+                    {
+                        if (colors[searchForVertex(vertex)] != -1)
+                            tmpAvailable[colors[searchForVertex(vertex)]] = false;
+                    }
+                    for (int n = 0; n < highestColorNumber + 2; ++n)
+                        if (tmpAvailable[n] && n < highestColorNumber + 1)
+                        {
+                            colors[u] = n;
+                            if (n > highestColorNumber)
+                                highestColorNumber = n;
+                            break;
+                        }
+                }
+                else
+                {
+                    colors[adjacencyList[u].Item2] = color; // Assign the found color
+                }
                 // Reset the values back to false for the next iteration
                 foreach (int i in adjacencyList[u].Item1)
                     if (colors[i] != -1)
@@ -246,15 +280,17 @@ namespace ConsoleApplication1
 
         }
 
-        public void checkColoring()
+        public bool checkColoring()
         {
 
             for (int i = 0; i < numberOfVertices; ++i)
             {
                 foreach (int j in adjacencyList[i].Item1)
                     if (colors[i] == colors[j] && j != i)
-                        Console.WriteLine("Nie dziala");
+                        return false;
             }
+            return true;
+
         }
 
         public void RSColoring()
@@ -278,28 +314,66 @@ namespace ConsoleApplication1
             adjacencyList = tmp;
         }
 
-        public void SLColoring() //TODO
+        public void SFColoring() 
         {
 
             Tuple<List<int>, int>[] tmp = adjacencyList;
-            Tuple<List<int>, int>[] tmp2 = adjacencyList;
+            Tuple<List<int>, int>[] tmp2 = new Tuple<List<int>, int>[numberOfVertices];
+            bool[] available = new bool[numberOfVertices];
+            for (int j = 0; j < numberOfVertices; ++j)
+            {
+                available[j] = true;
+            }
+
             for (int j = 0; j < numberOfVertices; ++j)
             {
                 int smallest =1000000;
                 int index =1000000;
-                for (int i = 1; i < numberOfVertices; ++i)
+                for (int i = 0; i < numberOfVertices; ++i)
                 {
-                    if(adjacencyList[i].Item1.Count < smallest && adjacencyList[i].Item1[0] != -10)
+                    if(adjacencyList[i].Item1.Count < smallest && available[i] )
                     {
                         smallest = adjacencyList[i].Item1.Count;
                         index = i;
                     }
                 }
-                tmp2[j] = adjacencyList[index];
-                adjacencyList[j].Item1[0] = -10;
+                tmp2[j] = new Tuple<List<int>, int>( adjacencyList[index].Item1, adjacencyList[index].Item2);
+                available[index] = false;
+            }
+            adjacencyList = tmp2;
+            this.greedyColoring2();
+            adjacencyList = tmp;
+        }
+
+        public void SLColoring() 
+        {
+
+            Tuple<List<int>, int>[] tmp = adjacencyList;
+            Tuple<List<int>, int>[] tmp2 = new Tuple<List<int>, int>[numberOfVertices];
+            bool[] available = new bool[numberOfVertices];
+            for (int j = 0; j < numberOfVertices; ++j)
+            {
+                available[j] = true;
             }
 
+            for (int j = 0; j < numberOfVertices; ++j)
+            {
+                int smallest = 1000000;
+                int index = 1000000;
+                for (int i = 0; i < numberOfVertices; ++i)
+                {
+                    if (adjacencyList[i].Item1.Count < smallest && available[i])
+                    {
+                        smallest = adjacencyList[i].Item1.Count;
+                        index = i;
+                    }
+                }
+                tmp2[j] = new Tuple<List<int>, int>(adjacencyList[index].Item1, adjacencyList[index].Item2);
+                available[index] = false;
+            }
             adjacencyList = tmp2;
+            Array.Reverse(adjacencyList);
+
             this.greedyColoring2();
             adjacencyList = tmp;
         }
