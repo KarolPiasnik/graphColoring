@@ -400,5 +400,41 @@ namespace ConsoleApplication1
             this.greedyColoring2();
             adjacencyList = tmp;
         }
+
+        public void GISColoring()
+        {
+            int color = 0;
+            bool[] available = new bool[numberOfVertices];
+            int remaining = numberOfVertices;
+            bool canColor = true;
+
+            for (int i = 0; i < numberOfVertices; ++i)
+            {
+                colors[i] = -1;
+                available[i] = true;
+            }
+
+            while (remaining > 0)
+            {
+                for (int i = 0; i < numberOfVertices; ++i)
+                {
+                    canColor = true;
+                    if (available[i])
+                    {
+                        foreach (int vertex in adjacencyList[i].Item1)
+                            if (colors[vertex] == color)
+                                canColor = false;
+
+                        if (canColor)
+                        {
+                            colors[i] = color;
+                            available[i] = false;
+                            --remaining;
+                        }
+                    }
+                }
+                ++color;
+            }
+        }
     }
 }
