@@ -14,6 +14,48 @@ namespace ConsoleApplication1
         int[] colors;
         Tuple<List<int>, int>[] adjacencyList;
 
+        public Graph(int size, int a, int b, int c, int density)
+        {
+            string[] lines = RMATUndirected(size, a, b, c, density);
+            numberOfVertices = int.Parse(lines[0]);
+
+            if (lines.Length == numberOfVertices + 1)
+            {
+                colors = new int[numberOfVertices];
+                adjacencyList = new Tuple<List<int>, int>[numberOfVertices];
+                for (int i = 0; i < numberOfVertices; ++i)
+                    adjacencyList[i] = new Tuple<List<int>, int>(new List<int>(), i);
+                adjacency = new bool[numberOfVertices, numberOfVertices];
+                for (int i = 0; i < numberOfVertices; ++i)
+                    for (int j = 0; j < numberOfVertices; ++j)
+                        adjacency[i, j] = false;
+
+                for (int i = 1; i < lines.Length; ++i)
+                {
+                    int counter = 0;
+                    for (int j = 0; j < lines[i].Length; ++j)
+                    {
+                        if (lines[i][j] == '1')
+                        {
+                            adjacency[i - 1, counter] = true;
+                            adjacencyList[i - 1].Item1.Add(counter);
+                            ++counter;
+                        }
+                        else if (lines[i][j] == '0')
+                        {
+                            adjacency[i - 1, counter] = false;
+
+                            ++counter;
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("xxx");
+            }
+        }
         public Graph(int numberOfVertices)
         {
             this.numberOfVertices = numberOfVertices;
@@ -27,7 +69,7 @@ namespace ConsoleApplication1
                 adjacencyList[i] = new Tuple<List<int>, int>(new List<int>(), i);
         }
 
-        public Graph(string path)
+        public Graph(string path )
         {
 
             string[] lines = System.IO.File.ReadAllLines(path);
@@ -435,6 +477,105 @@ namespace ConsoleApplication1
                 }
                 ++color;
             }
+        }
+
+        //public void SLFColoring() //TODO
+        //{
+        //    int color = 0;
+        //    bool[] available = new bool[numberOfVertices];
+        //    int remaining = numberOfVertices;
+        //    bool canColor = true;
+
+        //    for (int i = 0; i < numberOfVertices; ++i)
+        //    {
+        //        colors[i] = -1;
+        //        available[i] = true;
+        //    }
+
+        //    while (remaining > 0)
+        //    {
+        //        for (int i = 0; i < numberOfVertices; ++i)
+        //        {
+        //            canColor = true;
+        //            if (available[i])
+        //            {
+        //                foreach (int vertex in adjacencyList[i].Item1)
+        //                    if (colors[vertex] == color)
+        //                        canColor = false;
+
+        //                if (canColor)
+        //                {
+        //                    colors[i] = color;
+        //                    available[i] = false;
+        //                    --remaining;
+        //                }
+        //            }
+        //        }
+        //        ++color;
+        //    }
+        //}
+
+        string[] RMATUndirected(int size, int a, int b, int c, int density)
+        {
+            int numberOfVertices = (int)Math.Pow(2, size);
+            Random rnd = new Random();
+            int count = 0, x = 0, y = 0, tmp = 0;
+            int[,] graph = new int[numberOfVertices, numberOfVertices];
+
+            tmp = numberOfVertices / 2;
+            for (int i = 0; i < numberOfVertices; i++)
+                for (int j = 0; j < numberOfVertices; j++)
+                    graph[i,j] = 0;
+            
+
+            while (count < density * numberOfVertices * numberOfVertices / 100.0)
+            {
+                int number = (rnd.Next() % 100) + 1;
+                tmp = numberOfVertices / 2;
+                x = 0;
+                y = 0;
+                while (tmp > 0)
+                {
+                    number = (rnd.Next() % 100) + 1;
+                    if (number <= a)
+                    {
+                        tmp /= 2;
+                    }
+                    else if (number <= (a + b))
+                    {
+                        x += tmp;
+                        tmp /= 2;
+                    }
+                    else if (number <= (a + b + c))
+                    {
+                        y += tmp;
+                        tmp /= 2;
+                    }
+                    else
+                    {
+                        x += tmp;
+                        y += tmp;
+                        tmp /= 2;
+                    }
+                }
+                if (graph[x,y] != 1 && x != y)
+                {
+                    graph[x,y] = 1;
+                    graph[y,x] = 1;
+                    count += 2;
+                }
+
+            }
+            string[] lines = new string[numberOfVertices+1];
+            lines[0] = numberOfVertices.ToString();
+            for (int i = 0; i < numberOfVertices; ++i)
+                for (int j = 0; j < numberOfVertices; ++j)
+                    lines[i+1] += (graph[i,j] + " ");
+            return lines;
+     
+                
+            
+
         }
     }
 }
